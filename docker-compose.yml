@@ -4,6 +4,9 @@ services:
     environment:
       FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+      OTEL_SERVICE_NAME: 'backend-flask'
+      OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
+      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
     build: ./backend-flask
     ports:
       - "4567:4567"
@@ -43,8 +46,8 @@ services:
   xray-daemon:
     image: "amazon/aws-xray-daemon"
     environment:
-      AWS_ACCESS_KEY_ID: "AKIA2UC3EYKNTUFDQYPS"
-      AWS_SECRET_ACCESS_KEY: "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"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       AWS_REGION: "us-east-1"
     command:
       - "xray -o -b xray-daemon:2000"
